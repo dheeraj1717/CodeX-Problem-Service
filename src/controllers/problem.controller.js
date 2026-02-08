@@ -1,8 +1,16 @@
-const pingProblemController = (req,res) =>{
-  return res.json({message:"Problem controller is alive"})
-}
+const NotImplemented = require("../errors/notImplemented.error");
 
-const addProblem = (req, res) => {};
+const pingProblemController = (req, res) => {
+  return res.json({ message: "Problem controller is alive" });
+};
+
+const addProblem = (req, res, next) => {
+  try {
+    throw new NotImplemented("addProblem");
+  } catch (error) {
+    next(error);
+  }
+};
 const getProblemByID = (req, res) => {};
 const getProblems = (req, res) => {};
 const deleteProblem = (req, res) => {};
