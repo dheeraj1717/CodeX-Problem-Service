@@ -1,4 +1,4 @@
-const NotImplemented = require("../errors/notImplemented.error");
+const NotFoundError = require("../errors/notFound.error");
 const { ProblemService } = require("../services");
 const { ProblemRepository } = require("../repositories");
 const { StatusCodes } = require("http-status-codes");
@@ -21,10 +21,50 @@ const addProblem = async (req, res, next) => {
     next(error);
   }
 };
-const getProblemByID = (req, res) => {};
-const getProblems = (req, res) => {};
-const deleteProblem = (req, res) => {};
-const updateProblem = (req, res) => {};
+const getProblemByID = async (req, res, next) => {
+  try {
+    const problem = await problemService.getProblemByID(req.params.id);
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Problem fetched successfully",
+      data: problem,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const getProblems = async (req, res, next) => {
+  try {
+    const problems = await problemService.getAllProblems();
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Problems fetched successfully",
+      data: problems,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const deleteProblem = async (req, res, next) => {
+  try {
+    const deletedProblem = await problemService.deleteProblem(req.params.id);
+    if (!deletedProblem) {
+      throw new NotFoundError("Problem", req.params.id);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+const updateProblem = async (req, res, next) => {
+  try {
+    const updatedProblem = await problemService.updateProblem(req.params.id,req.body);
+    if(!updatedProblem){
+      throw new NotFoundError("Problem",req.params.id);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   pingProblemController,
