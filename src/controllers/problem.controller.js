@@ -1,4 +1,3 @@
-const NotFoundError = require("../errors/notFound.error");
 const { ProblemService } = require("../services");
 const { ProblemRepository } = require("../repositories");
 const { StatusCodes } = require("http-status-codes");
@@ -48,9 +47,6 @@ const getProblems = async (req, res, next) => {
 const deleteProblem = async (req, res, next) => {
   try {
     const deletedProblem = await problemService.deleteProblem(req.params.id);
-    if (!deletedProblem) {
-      throw new NotFoundError("Problem", req.params.id);
-    }
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Problem deleted successfully",
@@ -63,9 +59,6 @@ const deleteProblem = async (req, res, next) => {
 const updateProblem = async (req, res, next) => {
   try {
     const updatedProblem = await problemService.updateProblem(req.params.id,req.body);
-    if(!updatedProblem){
-      throw new NotFoundError("Problem",req.params.id);
-    }
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Problem updated successfully",
