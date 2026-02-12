@@ -51,6 +51,11 @@ const deleteProblem = async (req, res, next) => {
     if (!deletedProblem) {
       throw new NotFoundError("Problem", req.params.id);
     }
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Problem deleted successfully",
+      data: deletedProblem,
+    });
   } catch (error) {
     next(error);
   }
@@ -61,6 +66,11 @@ const updateProblem = async (req, res, next) => {
     if(!updatedProblem){
       throw new NotFoundError("Problem",req.params.id);
     }
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Problem updated successfully",
+      data: updatedProblem,
+    });
   } catch (error) {
     next(error);
   }

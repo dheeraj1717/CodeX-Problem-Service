@@ -1,5 +1,4 @@
-const NotFoundError = require("../errors/notFound.error");
-const Problem = require("../models");
+const { Problem } = require("../models");
 
 class ProblemRepository {
   async createProblem(problemData) {
