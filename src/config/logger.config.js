@@ -1,7 +1,30 @@
 const winston = require('winston');
+require('winston-mongodb');
 
 const allowedTransports = [];
-allowedTransports.push(new winston.transports.Console());
+allowedTransports.push(new winston.transports.Console({
+    format:winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple(),
+        winston.format.timestamp({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        }),
+        winston.format.printf((log) => {
+            return `${log.timestamp} [${log.level}]: ${log.message} ${log.label ? `[${log.label}]:` : ''} ${log.source ? `[${log.source}]` : ''}`;
+        })
+    )
+}));
+
+allowedTransports.push(new winston.transports.MongoDB({
+    level: 'error',
+    db: process.env.LOG_DB_URI,
+    collection: 'logs',
+}));
+
+allowedTransports.push(new winston.transports.File({
+    level: 'error',
+    filename: `${__dirname}/../logs/error.log`,
+}));
 
 const logger = winston.createLogger({
     format: winston.format.combine(
@@ -9,7 +32,7 @@ const logger = winston.createLogger({
             format: 'YYYY-MM-DD HH:mm:ss'
         }),
         winston.format.printf((log) => {
-            return `${log.timestamp} [${log.level.toUpperCase()}]: ${log.message}`;
+            return `${log.timestamp} [${log.level.toUpperCase()}]: ${log.message} ${log.label ? `[${log.label}]` : ''} ${log.source ? `[${log.source}]` : ''}`;
         })
     ),
     defaultMeta: { service: 'problem-service' },

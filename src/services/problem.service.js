@@ -1,5 +1,6 @@
 const sanitizeMarkdown = require("../utils/markdownSanitizer");
 const NotFoundError = require("../errors/notFound.error");
+const logger = require("../config/logger.config").child({ label: 'Service', source: 'ProblemService' });
 
 class ProblemService {
   // as we might use the service for different repositories like one might be using mongodb and other might be using mysql, so we are making the constructor to accept the repository
@@ -37,6 +38,7 @@ class ProblemService {
     try {
       const problem = await this.problemRepository.getProblemByID(problemId);
       if(!problem){
+        logger.error(`Problem with id: ${problemId} not found`);
         throw new NotFoundError("Problem", problemId);
       }
       return problem;

@@ -1,4 +1,8 @@
 const { Problem } = require("../models");
+const logger = require("../config/logger.config").child({
+  label: "Repository",
+  source: "ProblemRepository",
+});
 
 class ProblemRepository {
   async createProblem(problemData) {
@@ -6,6 +10,7 @@ class ProblemRepository {
       const problem = await Problem.create(problemData);
       return problem;
     } catch (error) {
+      logger.error(`Error in Repository: ${error.message}`);
       throw error;
     }
   }
@@ -14,6 +19,7 @@ class ProblemRepository {
       const problems = await Problem.find({});
       return problems;
     } catch (error) {
+      logger.error(`Error in Repository: ${error.message}`);
       throw error;
     }
   }
@@ -23,6 +29,7 @@ class ProblemRepository {
       const problem = await Problem.findById(problemId);
       return problem;
     } catch (error) {
+      logger.error(`Error in Repository: ${error.message}`);
       throw error;
     }
   }
@@ -32,6 +39,7 @@ class ProblemRepository {
       const problem = await Problem.findByIdAndDelete(problemId);
       return problem;
     } catch (error) {
+      logger.error(`Error in Repository: ${error.message}`);
       throw error;
     }
   }
@@ -43,6 +51,7 @@ class ProblemRepository {
       });
       return problem;
     } catch (error) {
+      logger.error(`Error in Repository: ${error.message}`);
       throw error;
     }
   }
