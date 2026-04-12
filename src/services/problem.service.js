@@ -36,6 +36,7 @@ class ProblemService {
 
   async getProblemByID(problemId) {
     try {
+      console.log("Problem ID: ", problemId);
       const problem = await this.problemRepository.getProblemByID(problemId);
       if(!problem){
         logger.error(`Problem with id: ${problemId} not found`);
